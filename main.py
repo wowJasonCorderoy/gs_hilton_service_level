@@ -263,6 +263,10 @@ def run(event, context):
     if not is_correctFileName(filename):
         print(f"File {filename} is not correctly named. ABORTING.")
         return
+    
+    da_date = get_date(filename)
+    da_date_string = da_date.strftime("%Y-%m-%d")
+    site = infer_site(filename)
 
     bucketName = get_bucket_name(event)
     save_to_bucketname = save_to_bucket_name(bucketName)
@@ -280,6 +284,7 @@ def run(event, context):
         print(f"{filename} does not exist. ABORTING.")
         return
     
+    saveFileName = now_utc.strftime("%Y%m%d_%H:%M:%S")+"_"+filename
     copy_blob(bucket_name=bucketName, blob_name=filename, destination_bucket_name=save_to_bucketname, destination_blob_name=saveFileName)
     
     # hash time
